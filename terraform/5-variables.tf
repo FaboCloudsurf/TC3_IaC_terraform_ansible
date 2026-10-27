@@ -37,3 +37,8 @@ variable "vpc_cidr" {
   default = "10.0.0.0/16"
 }
 
+variable "github_repo" {
+  description = "GitHub repository allowed to assume the CI role, as owner/name"
+  type        = string
+  default     = "FaboCloudsurf/TC3_IaC_terraform_ansible"
+}
