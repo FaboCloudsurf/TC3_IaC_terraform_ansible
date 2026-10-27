@@ -1,0 +1,14 @@
+# Terraform working files and provider binaries
+**/.terraform/
+
+# State files: contain resource IDs and can contain secrets
+*.tfstate
+*.tfstate.*
+
+# Crash logs and local variable overrides
+crash.log
+*.tfvars
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
