@@ -4,7 +4,7 @@
 data "aws_iam_policy_document" "TC3_assume_role" {
   statement {
     effect  = "Allow"
-    actions = ["sts:AssumeRole"]   # "assume role" = temporarily become this identity
+    actions = ["sts:AssumeRole"] # "assume role" = temporarily become this identity
 
     principals {
       type        = "Service"
@@ -33,7 +33,7 @@ resource "aws_iam_role" "TC3_role" {
 # profile, which is a container holding exactly one role.
 resource "aws_iam_instance_profile" "TC3_instance_profile" {
   name = "${var.project_name}-profile"
-  role = aws_iam_role.TC3_role.name      # takes the role's name, not its ARN
+  role = aws_iam_role.TC3_role.name # takes the role's name, not its ARN
 }
 
 
@@ -48,8 +48,8 @@ data "aws_iam_policy_document" "TC3_policy" {
   statement {
     sid       = "ReadSiteContent"
     effect    = "Allow"
-    actions   = ["s3:GetObject"]                                 # download objects only
-    resources = ["${aws_s3_bucket.TC3_bucket.arn}/site/*"]   # objects under site/ only
+    actions   = ["s3:GetObject"]                           # download objects only
+    resources = ["${aws_s3_bucket.TC3_bucket.arn}/site/*"] # objects under site/ only
 
   }
 
@@ -57,10 +57,10 @@ data "aws_iam_policy_document" "TC3_policy" {
   statement {
     sid       = "ListSitePrefix"
     effect    = "Allow"
-    actions   = ["s3:ListBucket"]                                 # bucket-level action
-    resources = [aws_s3_bucket.TC3_bucket.arn]   
+    actions   = ["s3:ListBucket"] # bucket-level action
+    resources = [aws_s3_bucket.TC3_bucket.arn]
 
-        # Restrict listing to the site/ prefix. Without ListBucket, a missing
+    # Restrict listing to the site/ prefix. Without ListBucket, a missing
     # object returns 403 Access Denied instead of 404 Not Found, which makes
     # debugging misleading.
     condition {
@@ -69,7 +69,7 @@ data "aws_iam_policy_document" "TC3_policy" {
       values   = ["site/*"]
     }
   }
-  
+
 }
 
 # Attach the permissions to the role.

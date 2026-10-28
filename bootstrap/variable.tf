@@ -7,4 +7,6 @@ variable "region" {
 variable "github_repo" {
   description = "GitHub repository allowed to assume the CI role, as owner/name"
   type        = string
+  default     = "FaboCloudsurf/TC3_IaC_terraform_ansible"
+
 }
