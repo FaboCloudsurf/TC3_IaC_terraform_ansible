@@ -80,5 +80,11 @@ resource "aws_iam_role_policy" "TC3_role_policy" {
   policy = data.aws_iam_policy_document.TC3_policy.json
 }
 
-
+# Lets the SSM agent on the instance register with Systems Manager, so
+# Ansible can connect through Session Manager instead of SSH.
+# AWS-managed policy: AWS keeps its permissions current.
+resource "aws_iam_role_policy_attachment" "TC3_ssm" {
+  role       = aws_iam_role.TC3_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
   
