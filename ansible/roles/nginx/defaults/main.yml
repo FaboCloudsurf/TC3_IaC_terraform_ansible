@@ -1,0 +1,5 @@
+# Default variables for the nginx role. Lowest priority: any value set in
+# group_vars or on the command line overrides these.
+site_object_key: site/index.html   # S3 key of the page
+web_root: /var/www/html            # Folder Nginx serves files from on Ubuntu
+aws_region: us-east-1              # Region of the bucket

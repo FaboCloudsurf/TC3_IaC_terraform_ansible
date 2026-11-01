@@ -1,0 +1,74 @@
+what layer is the instance on
+1.insfrastructure layer (the “what exists” layer)
+2.(the “what runs on it” layer)
+The S3 bucket and IAM role are included to test whether you can wire resources together securely, not just launch a VM.
+
+why did these policies need to be attached in context to this project
+what does the instance need to do that made us add these specific permissions
+
+
+
+
+SECURITY
+
+
+
+
+
+
+
+
+
+In this project what can be cionsidered SECURITY
+what can be considered monitoring
+what are the other important pillars of cloud computing
+
+
+
+Real world approaches
+CI/CD pipeline. This is the most common. Ansible runs from a pipeline runner, such as GitHub Actions, GitLab CI, or Jenkins, triggered by a merge to main. 
+Every run is logged and repeatable, and it doesn’t depend on whose machine is configured correctly. The SSH key sits in the pipeline’s secrets store, not on 
+anyone’s laptop.
+
+A central control node. This is either a dedicated instance or a platform like AWX or Red Hat Ansible Automation Platform (formerly Ansible Tower). 
+Teams use this when many people run playbooks against a large fleet and need access control, scheduling, and an audit trail.
+
+SSM instead of SSH. On AWS, many teams skip SSH entirely. Ansible connects through AWS Systems Manager Session Manager, so port 22 is closed and no key pairs 
+are needed. Access is controlled through IAM instead of network rules.
+
+All three exist for the same reason: to remove the laptop as the single point of control and to get auditability.
+
+Decision: where Ansible runs → a GitHub Actions pipeline, not your Mac
+
+Operational overhead: There’s no control node to build, patch, or pay for. GitHub provides a fresh runner for each job.
+Security and compliance:
+The pipeline gets AWS access through OIDC, which gives it short-lived credentials instead of stored access keys.
+Any secrets live in GitHub Secrets, not on a laptop.
+Every run is logged, so you have an audit trail.
+Reliability: Every run uses the same clean environment, so you avoid “works on my machine” drift.
+Team skills: Your repo is already on GitHub, which the challenge requires. GitHub Actions is the most common CI tool for GitHub-hosted code.
+Cost: No extra EC2 instance. Private repos get an allotment of free runner minutes.
+Time to market (the trade-off): This takes more setup than running Ansible from your Mac. You’re on a 72-hour clock, so weigh that.
+
+
+Add to terraform/2-s3.tf - path module
+
+“This .tf file” means 2-s3.tf, the file where you’re writing that line of code.
+
+You’re adding the aws_s3_object block to 2-s3.tf.
+2-s3.tf is saved inside the terraform/ folder: TC3_IaC_terraform_ansible/terraform/2-s3.tf.
+So when Terraform reads ${path.module} in that file, it replaces it with the folder that holds the file, which is terraform/.
+
+What Terraform does with the line
+
+What you write:
+
+${path.module}/../site/index.html
+
+What Terraform turns it into:
+
+terraform/../site/index.html
+
+Which means terraform/ → up one level → site/index.html.
+
+The folder isn’t hardcoded anywhere. If 2-s3.tf were saved in a different folder, path.module would automatically mean that folder instead.

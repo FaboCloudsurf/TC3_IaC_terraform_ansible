@@ -1,0 +1,18 @@
+# Dynamic inventory: queries EC2 at run time instead of listing hosts by hand.
+# The filename must end in aws_ec2.yml for the plugin to recognize it.
+plugin: amazon.aws.aws_ec2
+regions:
+  - us-east-1
+
+# Only the TC3 web server, and only while it's running
+filters:
+  tag:Name: TC3-instance
+  instance-state-name: running
+
+# Name each host by instance ID: SSM connects by ID, not IP
+hostnames:
+  - instance-id
+
+# Put every matched instance in the "web" group
+groups:
+  web: true

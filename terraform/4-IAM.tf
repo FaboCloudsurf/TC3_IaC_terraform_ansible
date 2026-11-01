@@ -15,7 +15,7 @@ data "aws_iam_policy_document" "TC3_assume_role" {
 
 
 # IAM role the web server runs as.
-# Gives the instance AWS credentials without storing access keys on the box.
+# Gives the instance AWS credentials without storing access keys on the box!!!!
 # Credentials are temporary and rotated automatically through the instance
 # metadata service.
 resource "aws_iam_role" "TC3_role" {

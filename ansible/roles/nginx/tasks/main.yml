@@ -1,0 +1,36 @@
+# ---------------------------------------------------------------------------
+# Installs Nginx, deploys the Hello World page from S3, and keeps Nginx running.
+# Every task is idempotent: re-running changes nothing if the server is already correct.
+# ---------------------------------------------------------------------------
+
+- name: Install Nginx and the AWS SDK for Python
+  ansible.builtin.apt:
+    name:
+      - nginx          # web server
+      - python3-boto3  # needed by the S3 download task, which runs on the instance
+    state: present
+    update_cache: true        # refresh the package list first...
+    cache_valid_time: 3600    # ...unless it was refreshed in the last hour
+
+- name: Download the web page from S3
+  amazon.aws.s3_object:
+    bucket: "{{ site_bucket }}"
+    object: "{{ site_object_key }}"
+    dest: "{{ web_root }}/index.html"
+    mode: get              # download (as opposed to put/upload)
+    overwrite: different   # only download if the S3 copy differs from the local one
+    region: "{{ aws_region }}"
+  # No credentials here: boto3 on the instance uses the instance's IAM role
+
+- name: Set ownership and permissions on the web page
+  ansible.builtin.file:
+    path: "{{ web_root }}/index.html"
+    owner: root
+    group: root
+    mode: "0644"           # owner read/write, everyone else read-only
+
+- name: Ensure Nginx is running and starts on boot
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: true

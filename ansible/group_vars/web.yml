@@ -1,0 +1,10 @@
+# Connection settings for every host in the "web" group.
+# Connect through SSM Session Manager instead of SSH.
+ansible_connection: amazon.aws.aws_ssm
+ansible_aws_ssm_region: us-east-1
+# Bucket the plugin uses to transfer files to and from the instance
+ansible_aws_ssm_bucket_name: tc3-bucket20261023065519396800000001
+
+# Bucket holding the web page under site/. Same bucket SSM uses for file
+# transfer; Terraform created both uses in one bucket.
+site_bucket: "{{ ansible_aws_ssm_bucket_name }}"

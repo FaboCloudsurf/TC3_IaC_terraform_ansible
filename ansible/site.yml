@@ -1,0 +1,10 @@
+# ---------------------------------------------------------------------------
+# Main playbook: configures every host in the "web" group as a web server.
+# Hosts come from the dynamic inventory; the connection method (SSM) comes
+# from group_vars/web.yml.
+# ---------------------------------------------------------------------------
+- name: Configure TC3 web server
+  hosts: web
+  become: true      # run tasks as root; installing packages and writing to /var/www requires it
+  roles:
+    - nginx
